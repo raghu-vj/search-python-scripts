@@ -1,0 +1,15 @@
+{
+  "statusCode": 0,
+  "statusMessage": "successfully done",
+  "data": {
+    "suggestions": [
+      {
+        "suggestType": "TAG",
+        "text": "Pizza",
+        "metadata": "{\"type\":\"tag_V1\",\"data\":{\"subType\":\"DISH\",\"vegIdentifier\":\"NA\",\"cloudinaryId\":\"isaihr9c3lyyf7ml7opi\",\"dishFamilyId\":\"846647\"}}",
+        "score": 97901744.0,
+        "subType": "DISH"
+      }
+    ]
+  }
+}
