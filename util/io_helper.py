@@ -11,3 +11,8 @@ def write_to_file(content, file_name):
 def read_from_file(file_name):
     with open(file_name, "r") as file:
         return file.read()
+
+
+def append_to_file(file, text):
+    file.write(text)
+    file.write("\n")
