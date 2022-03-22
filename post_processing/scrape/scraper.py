@@ -2,18 +2,25 @@ import sys
 
 import requests
 import json
-
-from util import io_helper
 import datetime as dt
 
 HOST = "http://localhost:8080"
 PROD_HOST = "http://voyager-search-service.swiggy.prod"
 
-location_data = io_helper.read_from_file("data/location_data.csv")
-queries_data = io_helper.read_from_file("data/low_mrr_queries.txt").split("\n")
+
+def read_from_file(file_name):
+    with open(file_name, "r") as file:
+        return file.read()
+
+
+def append_to_file(file, text):
+    file.write(text)
+    file.write("\n")
 
 
 if __name__ == '__main__':
+    location_data = read_from_file("data/location_data.csv")
+    queries_data = read_from_file("data/low_mrr_queries.txt").split("\n")
     base_url = HOST
     if len(sys.argv) > 0:
         base_url = PROD_HOST
@@ -21,7 +28,7 @@ if __name__ == '__main__':
     file_name = "generated/" + str(dt.datetime.now()) + "_Hour_" + hour_of_day + ".csv"
     file = open(file_name, "a")
     for query in queries_data:
-        io_helper.append_to_file(file, "#### Query: " + query)
+        append_to_file(file, "#### Query: " + query)
         for query_data in location_data.split("\n"):
             try:
                 location_data_split = query_data.split(",")
@@ -49,12 +56,12 @@ if __name__ == '__main__':
                 }
                 response = requests.request("POST", url, headers=headers, data=payload)
                 json_data = json.loads(response.text)
-                io_helper.append_to_file(file, "#### Location: " + location_within_city + " City: " + city_id + "(" + city + ")" + ", Hour of day: " + hour_of_day)
-                io_helper.append_to_file(file, "" + "," + "Restaurant ID, Parent ID, Restaurant Name, Relevance")
+                append_to_file(file, "#### Location: " + location_within_city + " City: " + city_id + "(" + city + ")" + ", Hour of day: " + hour_of_day)
+                append_to_file(file, "" + "," + "Restaurant ID, Parent ID, Restaurant Name, Relevance")
                 for index, rest in enumerate(json_data['data']['searchResult']['RESTAURANT']):
                     if index > 19:
                         break
-                    io_helper.append_to_file(file, "" + "," + str(rest['id']) + "," + str(rest.get("parentId", "")) + "," + rest['name'])
+                    append_to_file(file, "" + "," + str(rest['id']) + "," + str(rest.get("parentId", "")) + "," + rest['name'])
             except:
                 print
     file.close()
